@@ -1,9 +1,8 @@
-package practice
+package exercise
 
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import kotlin.math.exp
 import kotlin.random.Random
 
 class AdditionTest {
