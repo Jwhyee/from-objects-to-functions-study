@@ -6,8 +6,6 @@ import strikt.assertions.isEqualTo
 import kotlin.random.Random
 
 class AdditionTest {
-    private fun randomNatural() = Random.nextInt(from = 1, until = 1000_000_000)
-
     @Test
     fun `add two numbers`() {
         expectThat(5 + 6).isEqualTo(11)
@@ -43,5 +41,4 @@ class AdditionTest {
             expectThat((z + x) + y).isEqualTo(z + (x + y))
         }
     }
-
 }
