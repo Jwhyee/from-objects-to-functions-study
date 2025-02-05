@@ -3,7 +3,6 @@ package exercise.chapter01
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import kotlin.random.Random
 
 class AdditionTest {
     @Test
@@ -16,7 +15,7 @@ class AdditionTest {
     @Test
     fun `zero identity`() {
         repeat(100) {
-            val x = randomNatural()
+            val x = randomIntNatural()
             expectThat(x + 0).isEqualTo(x)
         }
     }
@@ -24,8 +23,8 @@ class AdditionTest {
     @Test
     fun `commutative property`() {
         repeat(100) {
-            val x = randomNatural()
-            val y = randomNatural()
+            val x = randomIntNatural()
+            val y = randomIntNatural()
             expectThat(x + y).isEqualTo(x + y)
         }
     }
@@ -33,9 +32,9 @@ class AdditionTest {
     @Test
     fun `associative property`() {
         repeat(100) {
-            val x = randomNatural()
-            val y = randomNatural()
-            val z = randomNatural()
+            val x = randomIntNatural()
+            val y = randomIntNatural()
+            val z = randomIntNatural()
             expectThat((x + y) + z).isEqualTo(x + (y + z))
             expectThat((y + z) + x).isEqualTo(y + (z + x))
             expectThat((z + x) + y).isEqualTo(z + (x + y))
