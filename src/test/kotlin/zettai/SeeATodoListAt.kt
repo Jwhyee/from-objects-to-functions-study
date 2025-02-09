@@ -1,6 +1,7 @@
 package zettai
 
 import jettai.Zettai
+import jettai.entity.ToDoList
 import org.http4k.client.JettyClient
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -10,6 +11,7 @@ import org.http4k.server.asServer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 class SeeATodoListAt {
     private fun getTodoList(
@@ -17,12 +19,16 @@ class SeeATodoListAt {
         listName: String
     ): ToDoList {
         val client = JettyClient()
+
         val req = Request(Method.GET, "http://localhost:8080/todo/$user/$listName")
         val res = client(req)
-        return if(res.status == Status.OK) parseResponse(res)
+
+        return if (res.status == Status.OK) parseResponse(res.bodyString())
         else fail(res.toMessage())
     }
+
     private fun parseResponse(html: String): ToDoList = TODO("parse the response")
+
     private fun startTheApplication(
         user: String,
         listName: String,
@@ -43,7 +49,7 @@ class SeeATodoListAt {
         val list = getTodoList(user, listName)
 
         // Then
-        expectThat(list.name).isEqualTo(listName)
-        expectThat(list.items).isEqualTo(foodToBuy)
+        expectThat(list.listName.name).isEqualTo(listName)
+        expectThat(list.items.map { it.description }).isEqualTo(foodToBuy)
     }
 }
