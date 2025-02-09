@@ -37,7 +37,7 @@ class SeeATodoListAt {
     ): ToDoList {
         val client = JettyClient()
 
-        val req = Request(Method.GET, "http://localhost:8080/todo/$user/$listName")
+        val req = Request(Method.GET, "http://localhost:8081/todo/$user/$listName")
         val res = client(req)
 
         return if (res.status == Status.OK) parseResponse(res.bodyString())
