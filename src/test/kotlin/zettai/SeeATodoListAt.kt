@@ -14,6 +14,22 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
 class SeeATodoListAt {
+    @Test
+    fun `List owners can see their lists`() {
+        // Given
+        val user = "frank"
+        val listName = "shipping"
+        val foodToBuy = listOf("carrots", "apples", "milk")
+
+        // When
+        startTheApplication(user, listName, foodToBuy)
+        val list = getToDoList(user, listName)
+
+        // Then
+        expectThat(list.listName.name).isEqualTo(listName)
+        expectThat(list.items.map { it.description }).isEqualTo(foodToBuy)
+    }
+
     private fun getToDoList(
         user: String,
         listName: String
@@ -35,21 +51,5 @@ class SeeATodoListAt {
         items: List<String>
     ) {
         val server = Zettai().asServer(Jetty(8081))
-    }
-
-    @Test
-    fun `List owners can see their lists`() {
-        // Given
-        val user = "frank"
-        val listName = "shipping"
-        val foodToBuy = listOf("carrots", "apples", "milk")
-
-        // When
-        startTheApplication(user, listName, foodToBuy)
-        val list = getToDoList(user, listName)
-
-        // Then
-        expectThat(list.listName.name).isEqualTo(listName)
-        expectThat(list.items.map { it.description }).isEqualTo(foodToBuy)
     }
 }
