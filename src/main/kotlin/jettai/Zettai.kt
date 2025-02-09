@@ -1,0 +1,4 @@
+package jettai
+
+class Zettai {
+}
