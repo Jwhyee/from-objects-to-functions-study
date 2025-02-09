@@ -14,7 +14,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
 class SeeATodoListAt {
-    private fun getTodoList(
+    private fun getToDoList(
         user: String,
         listName: String
     ): ToDoList {
@@ -46,7 +46,7 @@ class SeeATodoListAt {
 
         // When
         startTheApplication(user, listName, foodToBuy)
-        val list = getTodoList(user, listName)
+        val list = getToDoList(user, listName)
 
         // Then
         expectThat(list.listName.name).isEqualTo(listName)
