@@ -1,7 +1,11 @@
 package zettai
 
 import jettai.Zettai
+import jettai.entity.HtmlPage
+import jettai.entity.ListName
 import jettai.entity.ToDoList
+import jettai.entity.User
+import org.eclipse.jetty.client.Response
 import org.http4k.client.JettyClient
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -52,4 +56,9 @@ class SeeATodoListAt {
     ) {
         val server = Zettai().asServer(Jetty(8081))
     }
+
+    fun extractListData(request: Request): Pair<User, ListName> = TODO()
+    fun fetchListContent(listId: Pair<User, ListName>): ToDoList = TODO()
+    fun renderHtml(list: ToDoList): HtmlPage = TODO()
+    fun createResponse(html: HtmlPage): Response = TODO()
 }
