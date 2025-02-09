@@ -1,10 +1,7 @@
 package zettai
 
 import jettai.Zettai
-import jettai.entity.HtmlPage
-import jettai.entity.ListName
-import jettai.entity.ToDoList
-import jettai.entity.User
+import jettai.entity.*
 import org.eclipse.jetty.client.Response
 import org.http4k.client.JettyClient
 import org.http4k.core.Method
@@ -47,18 +44,35 @@ class SeeATodoListAt {
         else fail(res.toMessage())
     }
 
-    private fun parseResponse(html: String): ToDoList = TODO("parse the response")
+    private fun parseResponse(html: String): ToDoList {
+        val nameRegex = "<h2>.*<".toRegex()
+        val listName = ListName(extractListName(nameRegex, html))
+        val itemsRegex = "<td>.*?<".toRegex()
+        val items = itemsRegex.findAll(html)
+            .map { ToDoItem(extractItemDesc(it)) }.toList()
+        return ToDoList(listName, items)
+    }
+
+    private fun extractListName(nameRegex: Regex, html: String): String =
+        nameRegex.find(html)?.value
+            ?.substringAfter("<h2>")
+            ?.dropLast(1)
+            .orEmpty()
+
+    private fun extractItemDesc(matchResult: MatchResult): String =
+        matchResult.value.substringAfter("<td>").dropLast(1)
 
     private fun startTheApplication(
         user: String,
         listName: String,
         items: List<String>
     ) {
-        val server = Zettai().asServer(Jetty(8081))
+        val toDoList = ToDoList(
+            ListName(listName),
+            items.map(::ToDoItem)
+        )
+        val lists = mapOf(User(user) to listOf(toDoList))
+        val server = Zettai(lists).asServer(Jetty(8081))
+        server.start()
     }
-
-    fun extractListData(request: Request): Pair<User, ListName> = TODO()
-    fun fetchListContent(listId: Pair<User, ListName>): ToDoList = TODO()
-    fun renderHtml(list: ToDoList): HtmlPage = TODO()
-    fun createResponse(html: HtmlPage): Response = TODO()
 }
