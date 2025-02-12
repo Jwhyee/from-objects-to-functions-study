@@ -1,6 +1,7 @@
 package jettai
 
 import jettai.entity.*
+import jettai.util.andThen
 import org.http4k.core.*
 import org.http4k.routing.bind
 import org.http4k.routing.path
@@ -15,11 +16,12 @@ class Zettai(
 
     override fun invoke(req: Request): Response = routes(req)
 
-    private fun showList(req: Request): Response = req
-        .let(::extractListData)
-        .let(::fetchListContent)
-        .let(::renderHtml)
-        .let(::createResponse)
+    var processFun = ::extractListData andThen
+            ::fetchListContent andThen
+            ::renderHtml andThen
+            ::createResponse
+
+    private fun showList(req: Request): Response = processFun(req)
 
     /** 요청에서 사용자 이름과 목록을 뽑아낸다. */
     fun extractListData(request: Request): Pair<User, ListName> {
